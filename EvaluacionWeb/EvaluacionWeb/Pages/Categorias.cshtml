@@ -1,0 +1,110 @@
+﻿@page
+@model EvaluacionWeb.Pages.CategoriaModel
+
+@{
+    ViewData["Title"] = "Filtrar productos por categoría";
+}
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to right, #dfe9f3, #ffffff);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .contenedor {
+        max-width: 700px;
+        margin: 60px auto;
+        padding: 30px;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 10px;
+        color: #555;
+    }
+
+    select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #007bff;
+        border-radius: 6px;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    button {
+        background-color: #28a745;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    li {
+        background: linear-gradient(to right, #e3f2fd, #f1f8e9);
+        border-left: 6px solid #007bff;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+
+    .no-result {
+        text-align: center;
+        color: #888;
+        margin-top: 20px;
+        font-style: italic;
+    }
+</style>
+
+<div class="contenedor">
+    <h2>Filtrar productos vendidos en 2019</h2>
+
+    <form method="get">
+        <label for="CategoriaSeleccionadaId">Selecciona una categoría:</label>
+        <select asp-for="CategoriaSeleccionadaId" asp-items="Model.CategoriaSelectList">
+            <option value="">-- Selecciona una categoría --</option>
+        </select>
+        <button type="submit">Buscar</button>
+    </form>
+
+    @if (Model.ProductoFiltrado.Any())
+    {
+        <ul>
+            @foreach (var producto in Model.ProductoFiltrado)
+            {
+                <li>
+                    <strong>@producto.Nombre</strong> — Ventas: @producto.Venta.Count(v => v.Fecha.Year == 2019)
+                </li>
+            }
+        </ul>
+    }
+    else if (Model.CategoriaSeleccionadaId != null)
+    {
+        <p class="no-result">No hay productos con ventas en 2019 para esta categoría.</p>
+    }
+</div>
